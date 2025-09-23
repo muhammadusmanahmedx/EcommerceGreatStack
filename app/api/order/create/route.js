@@ -1,4 +1,5 @@
-import {getAuth, User} from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
+import User from "@/models/Users";
 import { NextResponse } from "next/server";
 import connectToDatabase from "@/config/db";
 import Order from "@/models/Order";
@@ -36,9 +37,11 @@ try {
     })
 
     
-        const user=await User.findById(userId);
-        user.cartItems=[];
-        await user.save();
+        const user = await User.findById(userId);
+        if (user) {
+            user.cartItems = [];
+            await user.save();
+        }
     
        
     await connectToDatabase();
