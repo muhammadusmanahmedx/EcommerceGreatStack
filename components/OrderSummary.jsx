@@ -4,15 +4,34 @@ import React, { useEffect, useState } from "react";
 
 const OrderSummary = () => {
 
-  const { currency, router, getCartCount, getCartAmount } = useAppContext()
+  const { currency, router, getCartCount, getCartAmount, getToken, user, cartItems, setCartItems } = useAppContext()
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [userAddresses, setUserAddresses] = useState([]);
 
   const fetchUserAddresses = async () => {
-    setUserAddresses(addressDummyData);
+  try {
+    const token = await getToken();
+    const res = await fetch("/api/user/get-address", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json(); // 👈 this is required
+
+    if (data.success) {
+      setUserAddresses(data.addresses);
+      if (data.addresses.length > 0) {
+        setSelectedAddress(data.addresses[0]);
+      }
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error(error.message);
   }
+};
+
 
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);
@@ -24,8 +43,11 @@ const OrderSummary = () => {
   }
 
   useEffect(() => {
-    fetchUserAddresses();
-  }, [])
+    if(user){
+
+      fetchUserAddresses();
+    }
+  }, [user])
 
   return (
     <div className="w-full md:w-96 bg-gray-500/5 p-5">

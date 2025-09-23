@@ -1,26 +1,48 @@
 'use client'
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { assets, productsDummyData } from "@/assets/assets";
+import { assets } from "@/assets/assets";
+
+// import { assets, productsDummyData } from "@/assets/assets";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import Footer from "@/components/seller/Footer";
 import Loading from "@/components/Loading";
+import toast from "react-hot-toast";
 
 const ProductList = () => {
 
-  const { router } = useAppContext()
+  const { router, getToken, user } = useAppContext();
 
-  const [products, setProducts] = useState([])
-  const [loading, setLoading] = useState(true)
+const [products, setProducts] = useState([]);
+const [loading, setLoading] = useState(false);
 
-  const fetchSellerProduct = async () => {
-    setProducts(productsDummyData)
-    setLoading(false)
+const fetchSellerProduct = async () => {
+  setLoading(true);
+  try {
+    const token = await getToken();
+    const { data } = await axios.get("/api/product/seller-list", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (data.success) {
+      setProducts(data.products);
+    } else {
+      toast.error(data.message || "Failed to fetch products");
+    }
+  } catch (error) {
+    toast.error(error.message || "Something went wrong");
+  } finally {
+    setLoading(false);
   }
+};
 
-  useEffect(() => {
+useEffect(() => {
+  if (user) {
     fetchSellerProduct();
-  }, [])
+  }
+}, [user]);
+
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
