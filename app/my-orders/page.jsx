@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import Loading from "@/components/Loading";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const MyOrders = () => {
 
@@ -15,33 +16,30 @@ const MyOrders = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const fetchOrders = async () => {
-        if (!user) return;
-        
-        try {
-            const token = await getToken();
-            const res = await fetch("/api/order/list", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            const data = await res.json();
-               
-            if (data.success) {
-                setOrders(data.orders.reverse());
-            } else {
-                toast.error(data.message);
-            }
-        } catch (error) {
-            toast.error(error.message);
-        } finally {
-            setLoading(false);
-        }
-    }
+   const fetchOrders = async () => {
+  try {
+    const token = await getToken();
+    const { data } = await axios.get('/api/order/list', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-    useEffect(() => {
-        if (user) {
-            fetchOrders();
-        }
-    }, [user]);
+    if (data.success) {
+      setOrders(data.orders.reverse()); // newest first
+      setLoading(false);
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error(error.message);
+  }
+};
+
+useEffect(() => {
+  if (user) {
+    fetchOrders();
+  }
+}, [user]);
+
 
     return (
         <>
