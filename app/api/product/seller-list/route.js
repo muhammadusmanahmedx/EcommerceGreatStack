@@ -1,9 +1,7 @@
-import connectToDatabase from '@/config/db';
-import authSeller from '@/lib/authSeller';
+import connectToDatabase from '@/config/db'
+import authSeller from '@/lib/authSeller'
 import { getAuth } from '@clerk/nextjs/server';
 import Product from '@/models/Product';
-// import { NextResponse } from 'next/server';
-import connectToDatabase from '@/config/db';
 
 export async function GET(req) {
   try {
