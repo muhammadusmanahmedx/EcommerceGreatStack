@@ -16,7 +16,7 @@ const HeaderSlider = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[250px] sm:h-[350px] md:h-[400px] lg:h-[450px] xl:h-[500px] bg-gradient-to-br from-amber-50 via-rose-100 to-pink-200 overflow-hidden mt-2 sm:mt-4 md:mt-6 rounded-lg sm:rounded-xl">
+    <div className="relative w-full h-[300px] sm:h-[250px] md:h-[300px] lg:h-[360px] xl:h-[400px] bg-gradient-to-br from-amber-50 via-rose-100 to-pink-200 overflow-hidden mt-2 sm:mt-4 md:mt-6 rounded-lg sm:rounded-xl">
       {/* Main Content */}
       <div className="relative h-full w-full">
         
@@ -82,49 +82,16 @@ const HeaderSlider = () => {
           </div>
         </div>
 
-        {/* TABLET LAYOUT (sm to md) - 50/50 Split with Right Text & Badge */}
+        {/* TABLET LAYOUT (sm to md) - 50/50 Split with Right Text moved to Left */}
         <div className="hidden sm:block md:hidden w-full h-full">
           <div className="w-full h-full flex relative">
-            {/* Badge - visible on tablet */}
-            <div className="absolute top-3 right-3 z-[100]">
-              <div className="w-16 h-16 sm:w-18 sm:h-18 relative">
-                <div
-                  className="absolute inset-0 animate-spin"
-                  style={{ animationDuration: "20s" }}
-                >
-                  <svg viewBox="0 0 180 180" className="w-full h-full">
-                    <defs>
-                      <path
-                        id="circle-path"
-                        d="M 90, 90 m -65, 0 a 65,65 0 1,1 130,0 a 65,65 0 1,1 -130,0"
-                      />
-                    </defs>
-                    <text className="text-[8px] font-light fill-black font-cinzel tracking-[0.15em]">
-                      <textPath href="#circle-path" startOffset="0%">
-                        15% OFF • FREE SHIPPING • PREMIUM •
-                      </textPath>
-                    </text>
-                  </svg>
-                </div>
-
-                <div className="absolute inset-3 rounded-full flex items-center justify-center overflow-hidden">
-                  <Image
-                    src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759049810/WhatsApp_Image_2025-09-27_at_11.01.40_PM_2_za5ufu.png"
-                    alt="Perfume Icon"
-                    width={40}
-                    height={40}
-                    className="w-6 h-6 object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-
             {/* Left Half: Text Section - 50% WIDTH */}
-            <div className="w-1/2 h-full flex items-center justify-center px-4">
+            <div className="w-1/2 h-full flex flex-col items-start justify-center px-4 space-y-6">
+              {/* Main Title */}
               <div className="text-left max-w-full">
                 <h1 className="text-xl sm:text-2xl font-light text-gray-800 tracking-wide leading-tight font-playfair">
                   AWAKEN YOUR
-                  <br />
+                 
                   <span className="relative inline-flex items-center gap-2 font-medium text-rose-900">
                     SENSES
                     <span className="inline-flex items-center rounded-full overflow-hidden border border-gray-300 align-middle">
@@ -147,20 +114,20 @@ const HeaderSlider = () => {
                   Get 15% off on Your first orders
                 </p>
               </div>
+
+              {/* Right Text moved to left section */}
+              <div className="text-left max-w-full">
+                <p className="text-base font-regular text-black tracking-wide font-cinzel uppercase leading-tight">
+                  Luxury Fragrances
+                </p>
+                <p className="text-sm font-light text-gray-600 tracking-wide font-playfair italic leading-snug mt-1">
+                  where every drop is a portal to a hidden world.
+                </p>
+              </div>
             </div>
 
             {/* Right Half: Bottle Image & Button - 50% WIDTH */}
             <div className="w-1/2 h-full relative flex flex-col items-center justify-center">
-              {/* Right Text - positioned at top right of this section */}
-              <div className="absolute top-6 right-4 text-right z-40 max-w-[80%]">
-                <p className="text-sm font-regular text-black tracking-wide font-cinzel uppercase leading-tight">
-                  Luxury Fragrances
-                </p>
-                <p className="text-xs font-light text-gray-600 tracking-wide font-playfair italic leading-snug mt-1">
-                  where every drop is a portal to a hidden world.
-                </p>
-              </div>
-
               {/* Bottle Image */}
               <div
                 className={`flex-1 flex items-center justify-center transition-all duration-1000 ease-out ${isVisible
@@ -224,46 +191,50 @@ const HeaderSlider = () => {
           </div>
 
           {/* Rotating Badge - Hidden on md, visible on lg+ */}
-          <div className="hidden lg:block absolute top-4 right-4 lg:right-6 z-[100]">
-            <div className="w-28 h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 relative">
-              <div
-                className="absolute inset-0 animate-spin"
-                style={{ animationDuration: "20s" }}
-              >
-                <svg viewBox="0 0 180 180" className="w-full h-full">
-                  <defs>
-                    <path
-                      id="circle-path"
-                      d="M 90, 90 m -65, 0 a 65,65 0 1,1 130,0 a 65,65 0 1,1 -130,0"
-                    />
-                  </defs>
-                  <text className="text-[13px] lg:text-[15px] xl:text-[17px] font-light fill-black font-cinzel tracking-[0.2em]">
-                    <textPath href="#circle-path" startOffset="0%">
-                      15% OFF • FREE SHIPPING • PREMIUM •
-                    </textPath>
-                  </text>
-                </svg>
-              </div>
+          <div className="hidden lg:block absolute top-6 right-4 lg:right-6 z-[100]">
+  <div className="w-28 h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 relative">
+    {/* Rotating text circle */}
+    <div
+      className="absolute inset-0 animate-spin"
+      style={{ animationDuration: "20s" }}
+    >
+      <svg viewBox="0 0 200 200" className="w-full h-full">
+        <defs>
+          {/* Increased radius: 65 → 75 to push text away from center */}
+          <path
+            id="circle-path"
+            d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"
+          />
+        </defs>
+        <text className="text-[13px] lg:text-[15px] xl:text-[17px] font-extralight fill-black font-cinzel tracking-[0.25em]">
+          <textPath href="#circle-path" startOffset="0%">
+            15% OFF • FREE SHIPPING • PREMIUM •
+          </textPath>
+        </text>
+      </svg>
+    </div>
 
-              <div className="absolute inset-6 rounded-full flex items-center justify-center overflow-hidden">
-                <Image
-                  src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759049810/WhatsApp_Image_2025-09-27_at_11.01.40_PM_2_za5ufu.png"
-                  alt="Perfume Icon"
-                  width={70}
-                  height={70}
-                  className="w-12 h-12 lg:w-16 lg:h-16 xl:w-20 xl:h-20 object-contain"
-                />
-              </div>
-            </div>
-          </div>
+    {/* Inner image */}
+    <div className="absolute inset-6 rounded-full flex items-center justify-center overflow-hidden">
+      <Image
+        src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759049810/WhatsApp_Image_2025-09-27_at_11.01.40_PM_2_za5ufu.png"
+        alt="Perfume Icon"
+        width={70}
+        height={70}
+        className="w-12 h-12 lg:w-16 lg:h-16 xl:w-20 xl:h-20 object-contain"
+      />
+    </div>
+  </div>
+</div>
+
 
           {/* Luxury Fragrances text - Takes available right space */}
           <div className="absolute bottom-16 md:bottom-20 lg:bottom-24 right-4 md:right-6 lg:right-8 z-40 text-right max-w-[45%] lg:max-w-[40%]">
             <p className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-regular text-black tracking-wide lg:tracking-widest font-cinzel uppercase leading-tight">
               Luxury Fragrances
             </p>
-            <p className="text-sm md:text-base lg:text-lg font-light text-gray-600 tracking-wide font-playfair italic leading-snug mt-1">
-              where every drop is a <br className="hidden md:block" />
+            <p className="text-sm md:text-base hidden md:block  lg:text-lg font-light text-gray-600 tracking-wide font-playfair italic leading-snug mt-1">
+              where every drop is a
               portal to a hidden world.
             </p>
           </div>

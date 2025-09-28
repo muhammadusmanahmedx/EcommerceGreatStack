@@ -9,10 +9,7 @@ const Footer = () => {
         <div className="w-4/5">
           <Image className="w-28 md:w-32" src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1758994664/Asset_1_seeizr.png" width={220} height={62} alt="logo" />
           <p className="mt-6 text-sm">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
+          A brand that celebrates individuality,<br></br> elegance, and the power of scent.
           </p>
         </div>
 
@@ -40,7 +37,7 @@ const Footer = () => {
           <div>
             <h2 className="font-medium text-gray-900 mb-5">Get in touch</h2>
             <div className="text-sm space-y-2">
-              <p>+1-234-567-890</p>
+              <p>+923175331563</p>
               <p>contact@SalSabeelscents.com</p>
             </div>
           </div>
