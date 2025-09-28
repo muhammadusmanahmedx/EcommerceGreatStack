@@ -21,6 +21,7 @@ export const AppContextProvider = (props) => {
     const { getToken } = useAuth()
 
     const [products, setProducts] = useState([])
+    const [categories, setCategories] = useState([])
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(false)
     const [cartItems, setCartItems] = useState({})
@@ -44,6 +45,21 @@ export const AppContextProvider = (props) => {
 
 
     }
+
+
+    // Fetch categories data
+    const fetchCategoriesData = async () => {
+        try {
+            const { data } = await axios.get('/api/categories');
+            if (data.success) {
+                setCategories(data.categories);
+            } else {
+                toast.error(data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    };
 
 
     //user data fetch
@@ -167,7 +183,8 @@ export const AppContextProvider = (props) => {
     }
 
     useEffect(() => {
-        fetchProductData()
+        fetchProductData();
+        fetchCategoriesData();
     }, [])
 
     useEffect(() => {
@@ -182,6 +199,7 @@ export const AppContextProvider = (props) => {
         isSeller, setIsSeller,
         userData, fetchUserData,
         products, fetchProductData,
+        categories, fetchCategoriesData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
         getCartCount, getCartAmount

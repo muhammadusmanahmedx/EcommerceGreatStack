@@ -96,16 +96,22 @@ const Product = () => {
                             <tbody>
                                 <tr>
                                     <td className="text-gray-600 font-medium">Brand</td>
-                                    <td className="text-gray-800/50 ">Generic</td>
+                                    <td className="text-gray-800/50 ">Salsabeel</td>
                                 </tr>
-                                <tr>
+                                {/* <tr>
                                     <td className="text-gray-600 font-medium">Color</td>
                                     <td className="text-gray-800/50 ">Multi</td>
-                                </tr>
+                                </tr> */}
                                 <tr>
                                     <td className="text-gray-600 font-medium">Category</td>
                                     <td className="text-gray-800/50">
                                         {productData.category}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className="text-gray-600 font-medium">Stock</td>
+                                    <td className={`font-medium ${productData.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                        {productData.stock > 0 ? 'In Stock' : 'Out of Stock'}
                                     </td>
                                 </tr>
                             </tbody>
@@ -113,11 +119,32 @@ const Product = () => {
                     </div>
 
                     <div className="flex items-center mt-10 gap-4">
-                        <button onClick={() => addToCart(productData._id)} className="w-full py-3.5 bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition">
-                            Add to Cart
+                        <button 
+                            onClick={() => productData.stock > 0 && addToCart(productData._id)} 
+                            disabled={productData.stock === 0}
+                            className={`w-full py-3.5 transition ${
+                                productData.stock > 0 
+                                    ? 'bg-gray-100 text-gray-800/80 hover:bg-gray-200 cursor-pointer' 
+                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            }`}
+                        >
+                            {productData.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
                         </button>
-                        <button onClick={() => { addToCart(productData._id); router.push('/cart') }} className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition">
-                            Buy now
+                        <button 
+                            onClick={() => { 
+                                if (productData.stock > 0) {
+                                    addToCart(productData._id); 
+                                    router.push('/cart');
+                                }
+                            }} 
+                            disabled={productData.stock === 0}
+                            className={`w-full py-3.5 transition ${
+                                productData.stock > 0 
+                                    ? 'bg-orange-500 text-white hover:bg-orange-600 cursor-pointer' 
+                                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                            }`}
+                        >
+                            {productData.stock > 0 ? 'Buy now' : 'Out of Stock'}
                         </button>
                     </div>
                 </div>

@@ -1,4 +1,5 @@
 import logo from "./logo.svg";
+
 import search_icon from "./search_icon.svg";
 import user_icon from "./user_icon.svg";
 import cart_icon from "./cart_icon.svg";
@@ -117,6 +118,8 @@ export const CartIcon = () => {
 
   )
 }
+
+
 
 export const BoxIcon = () => (
   <svg className="w-5 h-5 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">

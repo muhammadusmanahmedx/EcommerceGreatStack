@@ -8,6 +8,7 @@ price:{type:Number, required: true},
 offerPrice:{type:Number, required: true},
 image:{type:Array, required: true},
 category:{type:String, required: true},
+stock:{type:Number, required: true, default: 0},
 date:{type:Number, required:true},
 
 })

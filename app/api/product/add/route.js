@@ -30,6 +30,8 @@ const category = formData.get('category');
 
 const price=formData.get('price');
 const offerPrice=formData.get('offerPrice');
+const stockStatus=formData.get('stock');
+const stock = stockStatus === 'instock' ? 1 : 0;
 
 
 const files = formData.getAll('images');
@@ -68,6 +70,7 @@ const newProduct=await Product.create({
     category,
     price:Number(price),
       offerPrice:Number(offerPrice),
+    stock:stock,
     image:imageUrl,
     date:Date.now(),
 })

@@ -50,9 +50,23 @@ const ProductCard = ({ product }) => {
             </div>
 
             <div className="flex items-end justify-between w-full mt-1">
-                <p className="text-base font-medium">{currency}{product.offerPrice}</p>
-                <button className=" max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-slate-50 transition">
-                    Buy now
+                <div className="flex flex-col gap-1">
+                    <p className="text-base font-medium">{currency}{product.offerPrice}</p>
+                    {product.stock !== undefined && (
+                        <p className={`text-xs font-medium ${product.stock > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                            {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                        </p>
+                    )}
+                </div>
+                <button 
+                    disabled={product.stock === 0}
+                    className={`max-sm:hidden px-4 py-1.5 border rounded-full text-xs transition ${
+                        product.stock > 0 
+                            ? 'text-gray-500 border-gray-500/20 hover:bg-slate-50 cursor-pointer' 
+                            : 'text-gray-400 border-gray-300 cursor-not-allowed bg-gray-100'
+                    }`}
+                >
+                    {product.stock > 0 ? 'Buy now' : 'Out of stock'}
                 </button>
             </div>
         </div>

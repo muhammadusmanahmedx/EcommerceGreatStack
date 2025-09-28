@@ -14,6 +14,11 @@ export default {
       gridTemplateColumns:{
         'auto': 'repeat(auto-fit, minmax(200px, 1fr))'
       },
+      fontFamily: {
+        'playfair': ['Playfair Display', 'serif'],
+        'cinzel': ['Cinzel', 'serif'],
+        'cormorant': ['Cormorant Garamond', 'serif'],
+      },
     },
   },
   plugins: [],

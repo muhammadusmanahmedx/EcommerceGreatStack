@@ -16,6 +16,8 @@ const ProductList = () => {
 
 const [products, setProducts] = useState([]);
 const [loading, setLoading] = useState(false);
+const [deleteModal, setDeleteModal] = useState({ show: false, product: null });
+const [submitLoading, setSubmitLoading] = useState(false);
 
 const fetchSellerProduct = async () => {
   setLoading(true);
@@ -35,6 +37,39 @@ const fetchSellerProduct = async () => {
   } finally {
     setLoading(false);
   }
+};
+
+// Delete product handlers
+const handleDeleteClick = (product) => {
+  setDeleteModal({ show: true, product });
+};
+
+const handleDeleteConfirm = async () => {
+  try {
+    setSubmitLoading(true);
+    const { data } = await axios.delete(`/api/product/delete?id=${deleteModal.product._id}`);
+
+    if (data.success) {
+      setProducts(products.filter(product => product._id !== deleteModal.product._id));
+      toast.success(data.message || 'Product deleted successfully');
+    } else {
+      toast.error(data.message || 'Failed to delete product');
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Failed to delete product');
+  } finally {
+    setSubmitLoading(false);
+    setDeleteModal({ show: false, product: null });
+  }
+};
+
+const handleDeleteCancel = () => {
+  setDeleteModal({ show: false, product: null });
+};
+
+// Edit product handler
+const handleEdit = (product) => {
+  router.push(`/seller/edit/${product._id}`);
 };
 
 useEffect(() => {
@@ -57,7 +92,7 @@ useEffect(() => {
                 <th className="px-4 py-3 font-medium truncate">
                   Price
                 </th>
-                <th className="px-4 py-3 font-medium truncate max-sm:hidden">Action</th>
+                <th className="px-4 py-3 font-medium truncate">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-500">
@@ -79,15 +114,41 @@ useEffect(() => {
                   </td>
                   <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
                   <td className="px-4 py-3">${product.offerPrice}</td>
-                  <td className="px-4 py-3 max-sm:hidden">
-                    <button onClick={() => router.push(`/product/${product._id}`)} className="flex items-center gap-1 px-1.5 md:px-3.5 py-2 bg-orange-600 text-white rounded-md">
-                      <span className="hidden md:block">Visit</span>
-                      <Image
-                        className="h-3.5"
-                        src={assets.redirect_icon}
-                        alt="redirect_icon"
-                      />
-                    </button>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      {/* Edit Button */}
+                      <button
+                        onClick={() => handleEdit(product)}
+                        className="p-2 text-orange-600 hover:bg-orange-50 rounded-md transition-colors"
+                        title="Edit Product"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                      
+                      {/* Delete Button */}
+                      <button
+                        onClick={() => handleDeleteClick(product)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                        title="Delete Product"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                      
+                      {/* Visit Button */}
+                      <button 
+                        onClick={() => router.push(`/product/${product._id}`)} 
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                        title="View Product"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -96,6 +157,46 @@ useEffect(() => {
         </div>
       </div>}
       <Footer />
+      
+      {/* Delete Confirmation Modal */}
+      {deleteModal.show && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+            <div className="flex items-center mb-4">
+              <div className="flex-shrink-0">
+                <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.232 15.5c-.77.833.192 2.5 1.732 2.5z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-lg font-medium text-gray-900">Delete Product</h3>
+              </div>
+            </div>
+            <div className="mb-4">
+              <p className="text-sm text-gray-500">
+                Are you sure you want to delete "{deleteModal.product?.name}"? 
+                <br />This action cannot be undone.
+              </p>
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={handleDeleteCancel}
+                disabled={submitLoading}
+                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={submitLoading}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submitLoading ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

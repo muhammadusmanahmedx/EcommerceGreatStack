@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { assets } from '../../assets/assets';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
+import CategoriesIcon from "@/assets/CategoriesIcon.svg";
+
 
 const SideBar = () => {
     const pathname = usePathname()
@@ -10,6 +12,7 @@ const SideBar = () => {
         { name: 'Add Product', path: '/seller', icon: assets.add_icon },
         { name: 'Product List', path: '/seller/product-list', icon: assets.product_list_icon },
         { name: 'Orders', path: '/seller/orders', icon: assets.order_icon },
+        { name: 'Categories', path: '/seller/categories', icon: CategoriesIcon },
     ];
 
     return (
