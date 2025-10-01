@@ -16,44 +16,42 @@ const HeaderSlider = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[300px] sm:h-[250px] md:h-[300px] lg:h-[360px] xl:h-[400px] bg-gradient-to-br from-black via-gray-900 to-amber-900 overflow-hidden mt-2 sm:mt-4 md:mt-6 rounded-lg sm:rounded-xl">
+    <div className="relative w-full h-[450px] sm:h-[300px] md:h-[360px] lg:h-[400px] xl:h-[450px] bg-gradient-to-br from-black via-gray-900 to-amber-900 overflow-hidden mt-2 sm:mt-4 md:mt-6 rounded-lg sm:rounded-xl">
       {/* Main Content */}
       <div className="relative h-full w-full">
         
-        {/* MOBILE LAYOUT (xs to sm) - Full Width Stack */}
-        <div className="sm:hidden w-full h-full flex flex-col">
-          {/* Top Section: Main text and decorative image - FIXED HEIGHT */}
-          <div className="w-full h-auto flex items-center justify-center pt-4 px-4 pb-2">
-            <div className="w-full text-center">
-              <h1 className="text-lg font-light text-amber-200 tracking-wide leading-tight font-playfair">
-                AWAKEN YOUR
-                <br />
-                <span className="relative inline-flex items-center gap-1 font-medium text-amber-400">
-                  SENSES
-                  <span className="inline-flex items-center rounded-full overflow-hidden border border-amber-400 align-middle ml-1">
-                    <Image
-                      src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759053051/still-life-cosmetic-products-min_veptac.jpg"
-                      alt="Decorative"
-                      width={40}
-                      height={25}
-                      className="h-[0.7em] w-[1.2em] object-cover"
-                    />
-                  </span>
-                  with
+        {/* MOBILE LAYOUT (xs to sm) - Improved Responsiveness */}
+        <div className="sm:hidden w-full h-full relative">
+          {/* Left-aligned Text Section - Larger Text */}
+          <div className="absolute top-6 left-4 right-4 z-20">
+            <h1 className="text-3xl font-light text-amber-200 tracking-wide leading-tight font-playfair text-center">
+              AWAKEN YOUR
+              <br />
+              <span className="relative inline-flex items-center gap-1 font-medium text-amber-400">
+                SENSES
+                <span className="inline-flex items-center rounded-full overflow-hidden border border-amber-400 align-middle ml-1">
+                  <Image
+                    src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759053051/still-life-cosmetic-products-min_veptac.jpg"
+                    alt="Decorative"
+                    width={50}
+                    height={35}
+                    className="h-[0.7em] w-[1.2em] object-cover"
+                  />
                 </span>
-                <br />
-                <span className="text-lg font-light text-amber-200 tracking-wide leading-tight font-playfair">
-                  SalSabeel Scents
-                </span>
-              </h1>
-              <p className="text-xs text-amber-300 mt-2 font-light tracking-wide">
-                Get 15% off on Your first orders
-              </p>
-            </div>
+                with
+              </span>
+              <br />
+              <span className="text-3xl font-light text-amber-200 tracking-wide leading-tight font-playfair">
+                SalSabeel Scents
+              </span>
+            </h1>
+            <p className="text-lg text-amber-300 mt-4 font-light tracking-wide text-center">
+              Get 15% off on Your first orders
+            </p>
           </div>
           
-          {/* Center: Bottle Image - FLEXIBLE HEIGHT */}
-          <div className="w-full flex-1 flex items-center justify-center relative min-h-0">
+          {/* Center: Larger Bottle Image */}
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 z-30">
             <div
               className={`transition-all duration-1000 ease-out ${isVisible
                 ? 'translate-y-0 opacity-100'
@@ -63,16 +61,16 @@ const HeaderSlider = () => {
               <Image
                 src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759046755/Group_2_he7cyc.png"
                 alt="LOEWE Esencia Perfume Bottle"
-                width={200}
-                height={260}
-                className="w-28 h-auto object-contain filter brightness-110 max-h-full drop-shadow-xl"
+                width={280}
+                height={360}
+                className="w-40 h-auto object-contain filter brightness-110 drop-shadow-xl"
                 priority
               />
             </div>
           </div>
           
-          {/* Bottom: Shop Now Button - FIXED HEIGHT */}
-          <div className="w-full h-auto flex justify-center py-4 px-4">
+          {/* Bottom: Shop Now Button */}
+          <div className="absolute bottom-4 left-0 right-0 flex justify-center px-4 z-40">
             <button
               onClick={() => router.push('/all-products')}
               className="w-3/4 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-black font-medium text-sm rounded-none border border-amber-500 hover:bg-gradient-to-r hover:from-amber-400 hover:to-amber-500 transition-all duration-300 transform hover:-translate-y-1 tracking-wide font-cinzel active:scale-95 shadow-lg"
@@ -80,6 +78,10 @@ const HeaderSlider = () => {
               Shop Now
             </button>
           </div>
+
+          {/* Decorative Elements for Mobile */}
+          <div className="absolute top-20 left-8 w-3 h-3 bg-amber-400/40 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-32 right-8 w-2 h-2 bg-amber-500/50 rounded-full animate-pulse delay-300"></div>
         </div>
 
         {/* TABLET LAYOUT (sm to md) - 50/50 Split with Right Text moved to Left */}
