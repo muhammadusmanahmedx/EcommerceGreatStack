@@ -15,11 +15,16 @@ const Cart = () => {
       <Navbar />
       <div className="flex flex-col md:flex-row gap-10 px-6 md:px-16 lg:px-32 pt-14 mb-20">
         <div className="flex-1">
-          <div className="flex items-center justify-between mb-8 border-b border-gray-500/30 pb-6">
-            <p className="text-2xl md:text-3xl text-gray-500">
-              Your <span className="font-medium text-orange-600">Cart</span>
-            </p>
-            <p className="text-lg md:text-xl text-gray-500/80">{getCartCount()} Items</p>
+          <div className="flex items-center justify-between mb-8 pb-6">
+            <div className="flex flex-col">
+              <h1 className="text-3xl md:text-4xl font-regular text-gray-900 tracking-tight">
+                Your <span className="text-amber-600 font-regular">Cart</span>
+              </h1>
+              <div className="mt-2 flex justify-center md:justify-start">
+                <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full"></div>
+              </div>
+            </div>
+            <p className="text-lg md:text-xl text-gray-600 font-medium">{getCartCount()} Items</p>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto">
@@ -59,7 +64,7 @@ const Cart = () => {
                             />
                           </div>
                           <button
-                            className="md:hidden text-xs text-orange-600 mt-1"
+                            className="md:hidden text-xs text-red-600 mt-1 hover:text-red-800 font-medium"
                             onClick={() => updateCartQuantity(product._id, 0)}
                           >
                             Remove
@@ -68,7 +73,7 @@ const Cart = () => {
                         <div className="text-sm hidden md:block">
                           <p className="text-gray-800">{product.name}</p>
                           <button
-                            className="text-xs text-orange-600 mt-1"
+                            className="text-xs text-red-600 mt-1 hover:text-red-800 font-medium"
                             onClick={() => updateCartQuantity(product._id, 0)}
                           >
                             Remove
@@ -102,7 +107,7 @@ const Cart = () => {
               </tbody>
             </table>
           </div>
-          <button onClick={()=> router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
+          <button onClick={() => router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-gray-800 hover:text-gray-600">
             <Image
               className="group-hover:-translate-x-1 transition"
               src={assets.arrow_right_icon_colored}

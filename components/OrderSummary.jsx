@@ -8,8 +8,18 @@ const OrderSummary = () => {
     useAppContext();
 
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editingAddressId, setEditingAddressId] = useState(null);
+  const [newAddress, setNewAddress] = useState({
+    fullName: '',
+    phoneNumber: '',
+    pinCode: '',
+    area: '',
+    city: '',
+    state: '',
+  });
 
   const fetchUserAddresses = async () => {
     try {
@@ -35,16 +45,96 @@ const OrderSummary = () => {
 
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);
-    setIsDropdownOpen(false);
+  };
+
+  const handleEditAddress = (address) => {
+    setNewAddress({
+      fullName: address.fullName,
+      phoneNumber: address.phoneNumber,
+      pinCode: address.pinCode,
+      area: address.area,
+      city: address.city,
+      state: address.state,
+    });
+    setEditingAddressId(address._id);
+    setIsEditMode(true);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteAddress = async (addressId) => {
+    if (!window.confirm('Are you sure you want to delete this address?')) {
+      return;
+    }
+
+    try {
+      const token = await getToken();
+      const res = await fetch(`/api/user/delete-address/${addressId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success(data.message);
+        await fetchUserAddresses();
+        if (selectedAddress && selectedAddress._id === addressId) {
+          setSelectedAddress(null);
+        }
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+
+  const handleAddNewAddress = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const token = await getToken();
+      const url = isEditMode ? `/api/user/update-address/${editingAddressId}` : "/api/user/add-address";
+      const method = isEditMode ? "PUT" : "POST";
+      
+      const res = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ address: newAddress }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        toast.success(data.message);
+        setIsModalOpen(false);
+        setIsEditMode(false);
+        setEditingAddressId(null);
+        setNewAddress({
+          fullName: '',
+          phoneNumber: '',
+          pinCode: '',
+          area: '',
+          city: '',
+          state: '',
+        });
+        // Refresh addresses list
+        await fetchUserAddresses();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const createOrder = async () => {
     try {
-
-
-      //main
       if (!selectedAddress) {
-        return toast.error("Please select an address");
+        return toast.error("Please add your details before placing the order");
       }
 
       let cartItemsArray = Object.keys(cartItems).map((key) => ({
@@ -62,7 +152,7 @@ const OrderSummary = () => {
       const { data } = await axios.post(
         "/api/order/create",
         {
-          address: selectedAddress._id, // ensure your address model has `_id`
+          address: selectedAddress._id,
           items: cartItemsArray,
         },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -91,72 +181,101 @@ const OrderSummary = () => {
       <h2 className="text-xl md:text-2xl font-medium text-gray-700">Order Summary</h2>
       <hr className="border-gray-500/30 my-5" />
       <div className="space-y-6">
-        {/* Address Dropdown */}
+        {/* User Details Section */}
         <div>
-          <label className="text-base font-medium uppercase text-gray-600 block mb-2">
-            Select Address
-          </label>
-          <div className="relative inline-block w-full text-sm border">
+          <div className="flex justify-between items-center mb-4">
+            <label className="text-base font-medium uppercase text-gray-600">
+              Your Details
+            </label>
             <button
-              className="peer w-full text-left px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              onClick={() => {
+                setIsEditMode(false);
+                setEditingAddressId(null);
+                setNewAddress({
+                  fullName: '',
+                  phoneNumber: '',
+                  pinCode: '',
+                  area: '',
+                  city: '',
+                  state: '',
+                });
+                setIsModalOpen(true);
+              }}
+              className="text-sm bg-orange-600 text-white px-3 py-1.5 rounded hover:bg-orange-700 transition"
             >
-              <span>
-                {selectedAddress
-                  ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}`
-                  : "Select Address"}
-              </span>
-              <svg
-                className={`w-5 h-5 inline float-right transition-transform duration-200 ${
-                  isDropdownOpen ? "rotate-0" : "-rotate-90"
-                }`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="#6B7280"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
+              + Add Details
             </button>
-
-            {isDropdownOpen && (
-              <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5">
-                {userAddresses.map((address, index) => (
-                  <li
-                    key={index}
-                    className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer"
-                    onClick={() => handleAddressSelect(address)}
-                  >
-                    {address.fullName}, {address.area}, {address.city}, {address.state}
-                  </li>
-                ))}
-                <li
-                  onClick={() => router.push("/add-address")}
-                  className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer text-center"
+          </div>
+          
+          {userAddresses.length === 0 ? (
+            <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+              <p className="text-gray-500 mb-3">No details added yet</p>
+              <button
+                onClick={() => {
+                  setIsEditMode(false);
+                  setEditingAddressId(null);
+                  setNewAddress({
+                    fullName: '',
+                    phoneNumber: '',
+                    pinCode: '',
+                    area: '',
+                    city: '',
+                    state: '',
+                  });
+                  setIsModalOpen(true);
+                }}
+                className="text-orange-600 hover:text-orange-700 font-medium"
+              >
+                Add your details to continue
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {userAddresses.map((address, index) => (
+                <div
+                  key={index}
+                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                    selectedAddress && selectedAddress._id === address._id
+                      ? 'border-orange-500 bg-orange-50'
+                      : 'border-gray-300 hover:border-gray-400'
+                  }`}
+                  onClick={() => handleAddressSelect(address)}
                 >
-                  + Add New Address
-                </li>
-              </ul>
-            )}
-          </div>
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h4 className="font-medium text-gray-800">{address.fullName}</h4>
+                      <p className="text-sm text-gray-600">{address.phoneNumber}</p>
+                      <p className="text-sm text-gray-600">{address.area}</p>
+                      <p className="text-sm text-gray-600">{address.city}, {address.state} - {address.pinCode}</p>
+                    </div>
+                    <div className="flex gap-2 ml-4">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditAddress(address);
+                        }}
+                        className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200 transition"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteAddress(address._id);
+                        }}
+                        className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded hover:bg-red-200 transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Promo Code */}
-        <div>
-          <label className="text-base font-medium uppercase text-gray-600 block mb-2">
-            Promo Code
-          </label>
-          <div className="flex flex-col items-start gap-3">
-            <input
-              type="text"
-              placeholder="Enter promo code"
-              className="flex-grow w-full outline-none p-2.5 text-gray-600 border"
-            />
-            <button className="bg-orange-600 text-white px-9 py-2 hover:bg-orange-700">Apply</button>
-          </div>
-        </div>
-
-        <hr className="border-gray-500/30 my-5" />
+        <hr className="border-gray-200 my-5" />
 
         {/* Order Totals */}
         <div className="space-y-4">
@@ -194,6 +313,120 @@ const OrderSummary = () => {
       >
         Place Order
       </button>
+
+      {/* Add Address Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-medium text-gray-700">
+                  {isEditMode ? 'Edit Your Details' : 'Add Your Details'}
+                </h2>
+                <button 
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setIsEditMode(false);
+                    setEditingAddressId(null);
+                    setNewAddress({
+                      fullName: '',
+                      phoneNumber: '',
+                      pinCode: '',
+                      area: '',
+                      city: '',
+                      state: '',
+                    });
+                  }}
+                  className="text-gray-500 hover:text-gray-700 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <form onSubmit={handleAddNewAddress} className="space-y-4">
+                <input
+                  className="px-3 py-2.5 focus:border-orange-500 transition border border-gray-300 rounded outline-none w-full text-gray-700"
+                  type="text"
+                  placeholder="Full name"
+                  required
+                  onChange={(e) => setNewAddress({ ...newAddress, fullName: e.target.value })}
+                  value={newAddress.fullName}
+                />
+                <input
+                  className="px-3 py-2.5 focus:border-orange-500 transition border border-gray-300 rounded outline-none w-full text-gray-700"
+                  type="tel"
+                  placeholder="Phone number"
+                  required
+                  onChange={(e) => setNewAddress({ ...newAddress, phoneNumber: e.target.value })}
+                  value={newAddress.phoneNumber}
+                />
+                <input
+                  className="px-3 py-2.5 focus:border-orange-500 transition border border-gray-300 rounded outline-none w-full text-gray-700"
+                  type="text"
+                  placeholder="Pin code"
+                  required
+                  onChange={(e) => setNewAddress({ ...newAddress, pinCode: e.target.value })}
+                  value={newAddress.pinCode}
+                />
+                <textarea
+                  className="px-3 py-2.5 focus:border-orange-500 transition border border-gray-300 rounded outline-none w-full text-gray-700 resize-none"
+                  rows={3}
+                  placeholder="Address (Area and Street)"
+                  required
+                  onChange={(e) => setNewAddress({ ...newAddress, area: e.target.value })}
+                  value={newAddress.area}
+                ></textarea>
+                <div className="flex space-x-3">
+                  <input
+                    className="px-3 py-2.5 focus:border-orange-500 transition border border-gray-300 rounded outline-none w-full text-gray-700"
+                    type="text"
+                    placeholder="City"
+                    required
+                    onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
+                    value={newAddress.city}
+                  />
+                  <input
+                    className="px-3 py-2.5 focus:border-orange-500 transition border border-gray-300 rounded outline-none w-full text-gray-700"
+                    type="text"
+                    placeholder="State"
+                    required
+                    onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
+                    value={newAddress.state}
+                  />
+                </div>
+                
+                <div className="flex space-x-3 pt-4">
+                  <button 
+                    type="button"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setIsEditMode(false);
+                      setEditingAddressId(null);
+                      setNewAddress({
+                        fullName: '',
+                        phoneNumber: '',
+                        pinCode: '',
+                        area: '',
+                        city: '',
+                        state: '',
+                      });
+                    }}
+                    className="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded hover:bg-gray-300 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit"
+                    className="flex-1 bg-orange-600 text-white py-2.5 rounded hover:bg-orange-700 transition"
+                  >
+                    {isEditMode ? 'Update Details' : 'Save Details'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

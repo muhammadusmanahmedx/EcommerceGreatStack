@@ -19,36 +19,41 @@ const WishlistPage = () => {
             <Navbar />
             <div className="px-6 md:px-16 lg:px-32 py-8 min-h-screen bg-white">
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-                        My Wishlist
-                    </h1>
-                    <p className="text-gray-600 text-lg">
-                        Your favorite fragrances collection
-                    </p>
+                <div className="flex items-center justify-between mb-8 pb-6">
+                    <div className="flex flex-col">
+                        <h1 className="text-3xl md:text-4xl font-regular text-gray-900 tracking-tight">
+                            My <span className="text-amber-600 font-regular">Wishlist</span>
+                        </h1>
+                        <div className="mt-2 flex justify-center md:justify-start">
+                            <div className="w-20 h-1 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full"></div>
+                        </div>
+                        <p className="text-gray-600 text-lg mt-3">
+                            Your favorite fragrances collection
+                        </p>
+                    </div>
+                    {wishlistProducts.length > 0 && (
+                      <div className="flex items-center gap-3">
+  <div className="p-2.5 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+    <Image
+      src={assets.heart_icon}
+      alt="Heart"
+      className="w-4 h-4 brightness-0 invert"
+    />
+  </div>
+  <span className="text-base md:text-lg text-gray-700 font-regular">
+    {wishlistProducts.length}{" "}
+    {wishlistProducts.length === 1
+      ? "Item in your Wishlist"
+      : "Items in your Wishlist"}
+  </span>
+</div>
+
+                    )}
                 </div>
 
                 {/* Wishlist Content */}
                 {wishlistProducts.length > 0 ? (
                     <>
-                        {/* Stats */}
-                        <div className="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-200">
-                            <div className="flex items-center justify-center gap-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="p-2 bg-gradient-to-r from-red-500 to-pink-500 rounded-full">
-                                        <Image
-                                            src={assets.heart_icon}
-                                            alt="Heart"
-                                            className="w-4 h-4 brightness-0 invert"
-                                        />
-                                    </div>
-                                    <span className="text-gray-700 font-medium">
-                                        {wishlistProducts.length} {wishlistProducts.length === 1 ? 'Item' : 'Items'} in your wishlist
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
                         {/* Products Grid */}
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
                             {wishlistProducts.map((product) => (
@@ -58,9 +63,9 @@ const WishlistPage = () => {
                             ))}
                         </div>
                     </>
-                                ) : (
+                ) : (
                     /* Empty State */
-                    <div className="text-center py-16">
+                    <div className="text-center py-2">
                         <div className="bg-gray-50 rounded-3xl p-12 max-w-md mx-auto border border-gray-200">
                             <div className="mb-6">
                                 <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
@@ -78,7 +83,7 @@ const WishlistPage = () => {
                                 </p>
                                 <button
                                     onClick={() => window.location.href = '/all-products'}
-                                    className="bg-gray-800 hover:bg-gray-900 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                                    className="bg-amber-600 hover:bg-amber-500 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
                                 >
                                     Explore Products
                                 </button>
@@ -92,7 +97,7 @@ const WishlistPage = () => {
                     <div className="text-center mt-12">
                         <button
                             onClick={() => window.location.href = '/all-products'}
-                            className="bg-gray-800 hover:bg-gray-900 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                            className="bg-amber-600 hover:bg-amber-500 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
                         >
                             Continue Shopping
                         </button>

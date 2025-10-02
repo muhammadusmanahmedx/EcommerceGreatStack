@@ -5,7 +5,7 @@ import { useAppContext } from '@/context/AppContext';
 
 const ProductCard = ({ product }) => {
 
-    const { currency, router, toggleWishlist, isInWishlist } = useAppContext()
+    const { currency, router, toggleWishlist, isInWishlist, addToCart } = useAppContext()
 
     return (
         <div
@@ -58,6 +58,31 @@ const ProductCard = ({ product }) => {
                             />
                         </svg>
                     )}
+                </button>
+                
+                {/* Cart Icon */}
+                <button 
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (product.stock > 0) {
+                            addToCart(product._id);
+                        }
+                    }}
+                    disabled={product.stock === 0}
+                    className={`absolute top-12 right-2 p-2 rounded-full shadow-md transition-all duration-200 ${
+                        product.stock > 0
+                            ? 'bg-white hover:bg-gray-50 cursor-pointer'
+                            : 'bg-gray-200 cursor-not-allowed'
+                    }`}
+                    title={product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
+                >
+                    <Image
+                        src={assets.cart_icon}
+                        alt="Add to cart"
+                        className={`h-4 w-4 ${
+                            product.stock > 0 ? 'opacity-70 hover:opacity-100' : 'opacity-40'
+                        }`}
+                    />
                 </button>
             </div>
 

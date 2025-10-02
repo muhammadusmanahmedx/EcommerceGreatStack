@@ -14,7 +14,7 @@ const Product = () => {
 
     const { id } = useParams();
 
-    const { products, router, addToCart } = useAppContext()
+    const { products, router, addToCart, toggleWishlist, isInWishlist } = useAppContext()
 
     const [mainImage, setMainImage] = useState(null);
     const [productData, setProductData] = useState(null);
@@ -64,9 +64,38 @@ const Product = () => {
                 </div>
 
                 <div className="flex flex-col">
-                    <h1 className="text-3xl font-medium text-gray-800/90 mb-4">
-                        {productData.name}
-                    </h1>
+                    <div className="flex items-start justify-between mb-4">
+                        <h1 className="text-3xl font-medium text-gray-800/90 flex-1">
+                            {productData.name}
+                        </h1>
+                        <button 
+                            onClick={() => toggleWishlist(productData)}
+                            className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-200 border ${
+                                isInWishlist(productData._id)
+                                    ? 'border-red-300 bg-red-50 text-red-600 hover:bg-red-100' 
+                                    : 'border-gray-300 bg-white text-gray-600 hover:bg-gray-50 hover:text-red-500'
+                            }`}
+                        >
+                            <svg 
+                                width="16" 
+                                height="16" 
+                                viewBox="0 0 24 24" 
+                                fill={isInWishlist(productData._id) ? "#dc2626" : "none"}
+                                stroke={isInWishlist(productData._id) ? "#dc2626" : "currentColor"}
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                            <span className={`text-sm font-medium ${
+                                isInWishlist(productData._id) ? 'text-red-600' : 'text-gray-600'
+                            }`}>
+                                {isInWishlist(productData._id) ? 'In Wishlist' : 'Add to Wishlist'}
+                            </span>
+                        </button>
+                    </div>
                     <div className="flex items-center gap-2">
                         <div className="flex items-center gap-0.5">
                             <Image className="h-4 w-4" src={assets.star_icon} alt="star_icon" />
