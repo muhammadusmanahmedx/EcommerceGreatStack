@@ -8,7 +8,7 @@ import { useClerk, UserButton } from "@clerk/nextjs";
 
 const Navbar = () => {
 
-  const { isSeller, router, user } = useAppContext();
+  const { isSeller, router, user, getCartCount, getWishlistCount } = useAppContext();
 
   const { openSignIn } = useClerk();
 
@@ -41,7 +41,26 @@ const Navbar = () => {
       </div>
 
       <ul className="hidden md:flex items-center gap-4 ">
-        <Image className="w-4 h-4" src={assets.search_icon} alt="search icon" />
+        {/* Wishlist Icon with Badge */}
+        <div className="relative cursor-pointer p-1" onClick={() => router.push('/wishlist')}>
+          <Image className="w-4 h-4 hover:opacity-70 transition" src={assets.heart_icon} alt="wishlist icon" />
+          {getWishlistCount() > 0 && (
+            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-400 to-pink-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-lg border border-red-300/30 min-w-[16px]">
+              {getWishlistCount() > 9 ? '9+' : getWishlistCount()}
+            </span>
+          )}
+        </div>
+        
+        {/* Cart Icon with Badge */}
+        <div className="relative cursor-pointer p-1" onClick={() => router.push('/cart')}>
+          <Image className="w-4 h-4 hover:opacity-70 transition" src={assets.cart_icon} alt="cart icon" />
+          {getCartCount() > 0 && (
+            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-black text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-lg border border-yellow-300/30 min-w-[16px]">
+              {getCartCount() > 9 ? '9+' : getCartCount()}
+            </span>
+          )}
+        </div>
+
         {
           user
             ? <UserButton>
@@ -61,6 +80,26 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center md:hidden gap-3">
+        {/* Mobile Wishlist Icon */}
+        <div className="relative cursor-pointer p-1" onClick={() => router.push('/wishlist')}>
+          <Image className="w-4 h-4 hover:opacity-70 transition" src={assets.heart_icon} alt="wishlist icon" />
+          {getWishlistCount() > 0 && (
+            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-red-400 to-pink-500 text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-lg border border-red-300/30 min-w-[16px]">
+              {getWishlistCount() > 9 ? '9+' : getWishlistCount()}
+            </span>
+          )}
+        </div>
+        
+        {/* Mobile Cart Icon */}
+        <div className="relative cursor-pointer p-1" onClick={() => router.push('/cart')}>
+          <Image className="w-4 h-4 hover:opacity-70 transition" src={assets.cart_icon} alt="cart icon" />
+          {getCartCount() > 0 && (
+            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-black text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center shadow-lg border border-yellow-300/30 min-w-[16px]">
+              {getCartCount() > 9 ? '9+' : getCartCount()}
+            </span>
+          )}
+        </div>
+
         {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
         {
           user

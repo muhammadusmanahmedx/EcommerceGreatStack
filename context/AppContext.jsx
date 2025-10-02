@@ -25,6 +25,7 @@ export const AppContextProvider = (props) => {
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(false)
     const [cartItems, setCartItems] = useState({})
+    const [wishlistItems, setWishlistItems] = useState([])
 
 
     const fetchProductData = async () => {
@@ -34,15 +35,14 @@ export const AppContextProvider = (props) => {
             if (data.success) {
                 setProducts(data.products)
             } else {
-                toast.error(data.message)
+                console.log('API failed, using dummy data:', data.message)
+                setProducts(productsDummyData)
             }
 
         } catch (error) {
-            toast.error(error.message)
-
+            console.log('API error, using dummy data:', error.message)
+            setProducts(productsDummyData)
         }
-
-
 
     }
 
@@ -65,7 +65,7 @@ export const AppContextProvider = (props) => {
     //user data fetch
     const fetchUserData = async () => {
         try {
-            if (user.publicMetadata.role === "seller") {
+            if (user?.publicMetadata?.role === "seller") {
                 setIsSeller(true);
             }
 
@@ -79,12 +79,14 @@ export const AppContextProvider = (props) => {
 
             if (data.success) {
                 setUserData(data.user);
-                setCartItems(data.user.cartItems);
+                setCartItems(data.user.cartItems || {});
             } else {
-                toast.error(data.message);
+                console.log('User data fetch failed:', data.message);
+                setCartItems({});
             }
         } catch (error) {
-            toast.error(error.message);
+            console.log('User data fetch error:', error.message);
+            setCartItems({});
         }
     };
 
@@ -182,9 +184,52 @@ export const AppContextProvider = (props) => {
         return Math.floor(totalAmount * 100) / 100;
     }
 
+    // Wishlist Functions
+    const addToWishlist = (product) => {
+        const newWishlistItems = [...wishlistItems, { id: product._id, product }];
+        setWishlistItems(newWishlistItems);
+        localStorage.setItem('wishlistItems', JSON.stringify(newWishlistItems));
+        toast.success(`${product.name} added to wishlist!`);
+    };
+
+    const removeFromWishlist = (productId) => {
+        const newWishlistItems = wishlistItems.filter(item => item.id !== productId);
+        setWishlistItems(newWishlistItems);
+        localStorage.setItem('wishlistItems', JSON.stringify(newWishlistItems));
+        const product = products.find(p => p._id === productId);
+        toast.success(`${product?.name || 'Item'} removed from wishlist!`);
+    };
+
+    const isInWishlist = (productId) => {
+        return wishlistItems.some(item => item.id === productId);
+    };
+
+    const getWishlistCount = () => {
+        return wishlistItems.length;
+    };
+
+    const toggleWishlist = (product) => {
+        if (isInWishlist(product._id)) {
+            removeFromWishlist(product._id);
+        } else {
+            addToWishlist(product);
+        }
+    };
+
     useEffect(() => {
         fetchProductData();
         fetchCategoriesData();
+        
+        // Load wishlist from localStorage
+        const savedWishlist = localStorage.getItem('wishlistItems');
+        if (savedWishlist) {
+            try {
+                setWishlistItems(JSON.parse(savedWishlist));
+            } catch (error) {
+                console.error('Error parsing wishlist from localStorage:', error);
+                setWishlistItems([]);
+            }
+        }
     }, [])
 
     useEffect(() => {
@@ -202,7 +247,10 @@ export const AppContextProvider = (props) => {
         categories, fetchCategoriesData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount
+        getCartCount, getCartAmount,
+        wishlistItems, setWishlistItems,
+        addToWishlist, removeFromWishlist,
+        isInWishlist, getWishlistCount, toggleWishlist
     }
 
     return (

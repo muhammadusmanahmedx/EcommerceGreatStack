@@ -79,9 +79,9 @@ const Banner = () => {
         </div>
         
         {/* Main Image - Mobile */}
-        <div className="md:hidden relative z-10 transform hover:scale-105 transition-transform duration-500 w-full flex justify-center items-end h-full">
+        <div className="md:hidden relative z-10 transform hover:scale-105 transition-transform duration-500 w-full flex justify-center items-end h-full py-4">
           <Image
-            className="w-full max-w-md drop-shadow-2xl"
+            className="w-full max-w-md h-auto object-contain drop-shadow-2xl"
             src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759317175/27825401580_1_kn2mhu.png"
             width={500}
             height={500}
