@@ -35,7 +35,7 @@ const AboutUs = () => {
                         <div className="order-2 lg:order-1">
                             <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
                                 <Image
-                                    src={assets.girl_with_headphone_image}
+                                    src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759317175/27825401580_1_kn2mhu.png"
                                     alt="Salsabeel Scents Story"
                                     fill
                                     className="object-cover"
@@ -162,7 +162,7 @@ const AboutUs = () => {
                     </div>
 
                     {/* Team Section */}
-                    <div className="mb-20">
+                    {/* <div className="mb-20">
                         <div className="text-center mb-12">
                             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                                 Meet Our <span className="text-amber-600">Team</span>
@@ -171,11 +171,11 @@ const AboutUs = () => {
                             <p className="max-w-2xl mx-auto text-lg text-gray-600">
                                 The passionate individuals behind every exquisite fragrance
                             </p>
-                        </div>
+                        </div> */}
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"> */}
                             {/* Team Member 1 */}
-                            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300">
+                            {/* <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300">
                                 <div className="relative w-32 h-32 mx-auto mb-6">
                                     <Image
                                         src={assets.girl_with_earphone_image}
@@ -190,10 +190,10 @@ const AboutUs = () => {
                                     With over 15 years of experience in luxury perfumery, Sarah crafts our signature scents 
                                     with unmatched expertise and passion.
                                 </p>
-                            </div>
+                            </div> */}
 
                             {/* Team Member 2 */}
-                            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300">
+                            {/* <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300">
                                 <div className="relative w-32 h-32 mx-auto mb-6">
                                     <Image
                                         src={assets.boy_with_laptop_image}
@@ -208,10 +208,10 @@ const AboutUs = () => {
                                     Michael leads our creative vision, ensuring every fragrance embodies the perfect balance 
                                     of innovation and timeless elegance.
                                 </p>
-                            </div>
+                            </div> */}
 
                             {/* Team Member 3 */}
-                            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300">
+                            {/* <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300">
                                 <div className="relative w-32 h-32 mx-auto mb-6">
                                     <Image
                                         src={assets.girl_with_headphone_image}
@@ -228,7 +228,7 @@ const AboutUs = () => {
                                 </p>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* Contact CTA Section */}
                     <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 rounded-3xl p-8 md:p-12 text-center text-white">
