@@ -21,11 +21,11 @@ const Footer = () => {
                 <a className="hover:underline transition" href="#">Home</a>
               </li>
               <li>
-                <a className="hover:underline transition" href="#">About us</a>
+                <a className="hover:underline transition" href="/aboutus">About us</a>
               </li>
-              <li>
+              {/* <li>
                 <a className="hover:underline transition" href="#">Contact us</a>
-              </li>
+              </li> */}
               <li>
                 <a className="hover:underline transition" href="#">Privacy policy</a>
               </li>
