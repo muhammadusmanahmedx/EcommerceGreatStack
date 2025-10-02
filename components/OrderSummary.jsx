@@ -8,6 +8,7 @@ const OrderSummary = () => {
     useAppContext();
 
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [userAddresses, setUserAddresses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -18,7 +19,6 @@ const OrderSummary = () => {
     pinCode: '',
     area: '',
     city: '',
-    state: '',
   });
 
   const fetchUserAddresses = async () => {
@@ -45,6 +45,7 @@ const OrderSummary = () => {
 
   const handleAddressSelect = (address) => {
     setSelectedAddress(address);
+    setIsDropdownOpen(false);
   };
 
   const handleEditAddress = (address) => {
@@ -54,11 +55,11 @@ const OrderSummary = () => {
       pinCode: address.pinCode,
       area: address.area,
       city: address.city,
-      state: address.state,
     });
     setEditingAddressId(address._id);
     setIsEditMode(true);
     setIsModalOpen(true);
+    setIsDropdownOpen(false);
   };
 
   const handleDeleteAddress = async (addressId) => {
@@ -67,11 +68,13 @@ const OrderSummary = () => {
     }
 
     try {
-      const token = await getToken();
       const res = await fetch(`/api/user/delete-address/${addressId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
 
       const data = await res.json();
 
@@ -81,11 +84,13 @@ const OrderSummary = () => {
         if (selectedAddress && selectedAddress._id === addressId) {
           setSelectedAddress(null);
         }
+        setIsDropdownOpen(false);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      console.error('Delete address error:', error);
+      toast.error('Failed to delete address. Please try again.');
     }
   };
 
@@ -93,7 +98,6 @@ const OrderSummary = () => {
     e.preventDefault();
     
     try {
-      const token = await getToken();
       const url = isEditMode ? `/api/user/update-address/${editingAddressId}` : "/api/user/add-address";
       const method = isEditMode ? "PUT" : "POST";
       
@@ -101,10 +105,13 @@ const OrderSummary = () => {
         method: method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ address: newAddress }),
       });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
 
       const data = await res.json();
 
@@ -119,7 +126,6 @@ const OrderSummary = () => {
           pinCode: '',
           area: '',
           city: '',
-          state: '',
         });
         // Refresh addresses list
         await fetchUserAddresses();
@@ -127,12 +133,16 @@ const OrderSummary = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      console.error('Add/Update address error:', error);
+      toast.error('Failed to save address. Please try again.');
     }
   };
 
   const createOrder = async () => {
     try {
+
+
+      //main
       if (!selectedAddress) {
         return toast.error("Please add your details before placing the order");
       }
@@ -152,7 +162,7 @@ const OrderSummary = () => {
       const { data } = await axios.post(
         "/api/order/create",
         {
-          address: selectedAddress._id,
+          address: selectedAddress._id, // ensure your address model has `_id`
           items: cartItemsArray,
         },
         { headers: { Authorization: `Bearer ${token}` } }
@@ -197,7 +207,6 @@ const OrderSummary = () => {
                   pinCode: '',
                   area: '',
                   city: '',
-                  state: '',
                 });
                 setIsModalOpen(true);
               }}
@@ -220,7 +229,6 @@ const OrderSummary = () => {
                     pinCode: '',
                     area: '',
                     city: '',
-                    state: '',
                   });
                   setIsModalOpen(true);
                 }}
@@ -230,47 +238,67 @@ const OrderSummary = () => {
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
-              {userAddresses.map((address, index) => (
-                <div
-                  key={index}
-                  className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                    selectedAddress && selectedAddress._id === address._id
-                      ? 'border-orange-500 bg-orange-50'
-                      : 'border-gray-300 hover:border-gray-400'
+            <div className="relative inline-block w-full text-sm border">
+              <button
+                className="peer w-full text-left px-4 pr-2 py-2 bg-white text-gray-700 focus:outline-none"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <span>
+                  {selectedAddress
+                    ? `${selectedAddress.fullName}, ${selectedAddress.phoneNumber}, ${selectedAddress.area}, ${selectedAddress.city}`
+                    : "Select Details"}
+                </span>
+                <svg
+                  className={`w-5 h-5 inline float-right transition-transform duration-200 ${
+                    isDropdownOpen ? "rotate-0" : "-rotate-90"
                   }`}
-                  onClick={() => handleAddressSelect(address)}
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="#6B7280"
                 >
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h4 className="font-medium text-gray-800">{address.fullName}</h4>
-                      <p className="text-sm text-gray-600">{address.phoneNumber}</p>
-                      <p className="text-sm text-gray-600">{address.area}</p>
-                      <p className="text-sm text-gray-600">{address.city}, {address.state} - {address.pinCode}</p>
-                    </div>
-                    <div className="flex gap-2 ml-4">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditAddress(address);
-                        }}
-                        className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200 transition"
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {isDropdownOpen && (
+                <ul className="absolute w-full bg-white border shadow-md mt-1 z-10 py-1.5 max-h-64 overflow-y-auto">
+                  {userAddresses.map((address, index) => (
+                    <li key={index} className="group">
+                      <div 
+                        className="px-4 py-2 hover:bg-gray-500/10 cursor-pointer flex justify-between items-center"
+                        onClick={() => handleAddressSelect(address)}
                       >
-                        Edit
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteAddress(address._id);
-                        }}
-                        className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded hover:bg-red-200 transition"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+                        <span className="flex-1">
+                          {address.fullName}, {address.phoneNumber}, {address.area}, {address.city}
+                        </span>
+                        <div className="flex gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleEditAddress(address);
+                            }}
+                            className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200 transition"
+                            title="Edit"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteAddress(address._id);
+                            }}
+                            className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded hover:bg-red-200 transition"
+                            title="Delete"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
         </div>
@@ -314,7 +342,7 @@ const OrderSummary = () => {
         Place Order
       </button>
 
-      {/* Add Address Modal */}
+      {/* Add/Edit Address Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
@@ -334,7 +362,6 @@ const OrderSummary = () => {
                       pinCode: '',
                       area: '',
                       city: '',
-                      state: '',
                     });
                   }}
                   className="text-gray-500 hover:text-gray-700 text-2xl"
@@ -385,14 +412,6 @@ const OrderSummary = () => {
                     onChange={(e) => setNewAddress({ ...newAddress, city: e.target.value })}
                     value={newAddress.city}
                   />
-                  <input
-                    className="px-3 py-2.5 focus:border-orange-500 transition border border-gray-300 rounded outline-none w-full text-gray-700"
-                    type="text"
-                    placeholder="State"
-                    required
-                    onChange={(e) => setNewAddress({ ...newAddress, state: e.target.value })}
-                    value={newAddress.state}
-                  />
                 </div>
                 
                 <div className="flex space-x-3 pt-4">
@@ -408,7 +427,6 @@ const OrderSummary = () => {
                         pinCode: '',
                         area: '',
                         city: '',
-                        state: '',
                       });
                     }}
                     className="flex-1 bg-gray-200 text-gray-700 py-2.5 rounded hover:bg-gray-300 transition"

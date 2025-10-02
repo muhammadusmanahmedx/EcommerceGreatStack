@@ -3,32 +3,29 @@ import { getAuth } from "@clerk/nextjs/server";
 import { connectToDatabase } from "@/config/db";
 import Address from "@/models/Address";
 
-export async function PUT(request, { params }) {
+export async function DELETE(request, { params }) {
     try {
         await connectToDatabase();
 
         const { userId } = getAuth(request);
         const { id } = params;
-        const { address } = await request.json();
 
         if (!userId) {
             return NextResponse.json({ success: false, message: "Unauthorized" });
         }
 
-        const updatedAddress = await Address.findOneAndUpdate(
-            { _id: id, userId: userId },
-            address,
-            { new: true }
-        );
+        const deletedAddress = await Address.findOneAndDelete({
+            _id: id,
+            userId: userId
+        });
 
-        if (!updatedAddress) {
+        if (!deletedAddress) {
             return NextResponse.json({ success: false, message: "Address not found" });
         }
 
         return NextResponse.json({ 
             success: true, 
-            message: "Details updated successfully",
-            address: updatedAddress 
+            message: "Details deleted successfully" 
         });
 
     } catch (error) {
