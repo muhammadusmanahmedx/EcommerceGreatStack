@@ -5,9 +5,10 @@ import ProductCard from '@/components/ProductCard'
 import Navbar from '@/components/Navbar'
 import Image from 'next/image'
 import { assets } from '@/assets/assets'
+import { useRouter } from 'next/navigation'
 
 const WishlistPage = () => {
-    const { wishlistItems, products } = useAppContext()
+    const { wishlistItems, products, router } = useAppContext()
 
     // Get full product details for wishlist items
     const wishlistProducts = wishlistItems.map(wishlistItem => 
@@ -82,7 +83,7 @@ const WishlistPage = () => {
                                     Start exploring our exquisite perfume collection and add your favorites here
                                 </p>
                                 <button
-                                    onClick={() => window.location.href = '/all-products'}
+                                    onClick={() => router.push('/all-products')}
                                     className="bg-amber-600 hover:bg-amber-500 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
                                 >
                                     Explore Products
@@ -96,7 +97,7 @@ const WishlistPage = () => {
                 {wishlistProducts.length > 0 && (
                     <div className="text-center mt-12">
                         <button
-                            onClick={() => window.location.href = '/all-products'}
+                            onClick={() => router.push('/all-products')}
                             className="bg-amber-600 hover:bg-amber-500 text-white px-8 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
                         >
                             Continue Shopping

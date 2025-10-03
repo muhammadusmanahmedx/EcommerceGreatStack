@@ -34,16 +34,34 @@ export const AppContextProvider = (props) => {
             const { data } = await axios.get('/api/product/list')
             if (data.success) {
                 setProducts(data.products)
+                // Clean up cart items after products are loaded
+                cleanupCartItems(data.products)
             } else {
                 console.log('API failed, using dummy data:', data.message)
                 setProducts(productsDummyData)
+                cleanupCartItems(productsDummyData)
             }
 
         } catch (error) {
             console.log('API error, using dummy data:', error.message)
             setProducts(productsDummyData)
+            cleanupCartItems(productsDummyData)
         }
 
+    }
+
+    // Clean up cart items that reference non-existent products
+    const cleanupCartItems = (productsList) => {
+        setCartItems(prevCartItems => {
+            const cleanedCartItems = {};
+            for (const itemId in prevCartItems) {
+                const productExists = productsList.find(product => product._id === itemId);
+                if (productExists && prevCartItems[itemId] > 0) {
+                    cleanedCartItems[itemId] = prevCartItems[itemId];
+                }
+            }
+            return cleanedCartItems;
+        });
     }
 
 
@@ -177,7 +195,7 @@ export const AppContextProvider = (props) => {
         let totalAmount = 0;
         for (const items in cartItems) {
             let itemInfo = products.find((product) => product._id === items);
-            if (cartItems[items] > 0) {
+            if (cartItems[items] > 0 && itemInfo) {
                 totalAmount += itemInfo.offerPrice * cartItems[items];
             }
         }
@@ -188,14 +206,18 @@ export const AppContextProvider = (props) => {
     const addToWishlist = (product) => {
         const newWishlistItems = [...wishlistItems, { id: product._id, product }];
         setWishlistItems(newWishlistItems);
-        localStorage.setItem('wishlistItems', JSON.stringify(newWishlistItems));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('wishlistItems', JSON.stringify(newWishlistItems));
+        }
         toast.success(`${product.name} added to wishlist!`);
     };
 
     const removeFromWishlist = (productId) => {
         const newWishlistItems = wishlistItems.filter(item => item.id !== productId);
         setWishlistItems(newWishlistItems);
-        localStorage.setItem('wishlistItems', JSON.stringify(newWishlistItems));
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('wishlistItems', JSON.stringify(newWishlistItems));
+        }
         const product = products.find(p => p._id === productId);
         toast.success(`${product?.name || 'Item'} removed from wishlist!`);
     };
@@ -220,14 +242,16 @@ export const AppContextProvider = (props) => {
         fetchProductData();
         fetchCategoriesData();
         
-        // Load wishlist from localStorage
-        const savedWishlist = localStorage.getItem('wishlistItems');
-        if (savedWishlist) {
-            try {
-                setWishlistItems(JSON.parse(savedWishlist));
-            } catch (error) {
-                console.error('Error parsing wishlist from localStorage:', error);
-                setWishlistItems([]);
+        // Load wishlist from localStorage (client-side only)
+        if (typeof window !== 'undefined') {
+            const savedWishlist = localStorage.getItem('wishlistItems');
+            if (savedWishlist) {
+                try {
+                    setWishlistItems(JSON.parse(savedWishlist));
+                } catch (error) {
+                    console.error('Error parsing wishlist from localStorage:', error);
+                    setWishlistItems([]);
+                }
             }
         }
     }, [])

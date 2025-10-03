@@ -223,7 +223,7 @@ const Orders = () => {
                                         <br />
                                         <span>{order.address.area}</span>
                                         <br />
-                                        <span>{`${order.address.city}, ${order.address.state}`}</span>
+                                        <span>{order.address.city}</span>
                                         <br />
                                         <span className="text-sm text-gray-600">Phone: {order.address.phoneNumber}</span>
                                     </p>

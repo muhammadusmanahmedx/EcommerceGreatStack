@@ -4,8 +4,11 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { assets } from "@/assets/assets";
+import { useRouter } from "next/navigation";
 
 const AboutUs = () => {
+    const router = useRouter();
+    
     return (
         <>
             <Navbar />
@@ -242,13 +245,13 @@ const AboutUs = () => {
                             </p>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <button 
-                                    onClick={() => window.location.href = '/all-products'}
+                                    onClick={() => router.push('/all-products')}
                                     className="bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-semibold px-8 py-4 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300"
                                 >
                                     Shop Our Collection
                                 </button>
                                 <button 
-                                    onClick={() => window.location.href = '/'}
+                                    onClick={() => router.push('/')}
                                     className="border-2 border-amber-400 text-amber-400 font-semibold px-8 py-4 rounded-full hover:bg-amber-400 hover:text-black transition-all duration-300"
                                 >
                                     Learn More

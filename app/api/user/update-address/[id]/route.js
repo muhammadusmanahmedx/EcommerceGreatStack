@@ -15,9 +15,18 @@ export async function PUT(request, { params }) {
             return NextResponse.json({ success: false, message: "Unauthorized" });
         }
 
+        // Ensure we only update allowed fields (excluding state)
+        const allowedFields = {
+            fullName: address.fullName,
+            phoneNumber: address.phoneNumber,
+            pinCode: address.pinCode,
+            area: address.area,
+            city: address.city,
+        };
+
         const updatedAddress = await Address.findOneAndUpdate(
             { _id: id, userId: userId },
-            address,
+            allowedFields,
             { new: true }
         );
 

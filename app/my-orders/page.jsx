@@ -235,9 +235,7 @@ const MyOrders = () => {
                                                             <div className="space-y-1 text-sm">
                                                                 <p className="font-semibold text-gray-900">{order.address.fullName || 'N/A'}</p>
                                                                 <p className="text-gray-700">{order.address.area || 'N/A'}</p>
-                                                                <p className="text-gray-700">
-                                                                    {order.address.city || 'N/A'}{order.address.state ? `, ${order.address.state}` : ''}
-                                                                </p>
+                                                                <p className="text-gray-700">{order.address.city || 'N/A'}</p>
                                                                 <p className="text-gray-600 pt-2 border-t border-blue-200 mt-2">
                                                                     <span className="font-medium">Phone:</span> {order.address.phoneNumber || 'N/A'}
                                                                 </p>

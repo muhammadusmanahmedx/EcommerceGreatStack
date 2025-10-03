@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
 
+// Delete any existing models to force recreation
+delete mongoose.models.address;
+delete mongoose.models.Address;
+
 const addressSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },
@@ -8,11 +12,13 @@ const addressSchema = new mongoose.Schema(
     pinCode: { type: Number, required: true },
     area: { type: String, required: true },
     city: { type: String, required: true },
-    state: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+    strict: true // This ensures only defined schema fields are saved
+  }
+);
 
-  })
+const Address = mongoose.model("address", addressSchema);
 
-
-  const  Address = mongoose.models.address || mongoose.model("address", addressSchema);
-
-  export default Address
+export default Address;
