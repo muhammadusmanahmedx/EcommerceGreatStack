@@ -138,45 +138,45 @@ const CategoriesPage = () => {
           {loading ? (
             <Loading />
           ) : (
-          <div className="w-full md:p-10 p-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="pb-4 text-lg font-medium">All Categories</h2>
+          <div className="w-full lg:p-10 md:p-6 p-3">
+            <div className="flex justify-between items-center mb-3 md:mb-4">
+              <h2 className="pb-2 md:pb-4 text-lg md:text-xl font-medium">All Categories</h2>
             </div>
             
             {/* Add/Edit Category Form */}
-            <div className="mb-6 p-4 bg-white rounded-md border border-gray-500/20">
-              <h4 className="text-lg font-medium mb-3">
+            <div className="mb-4 md:mb-6 p-3 md:p-4 bg-white rounded-md border border-gray-500/20">
+              <h4 className="text-base md:text-lg font-medium mb-2 md:mb-3">
                 {editingCategory ? 'Edit Category' : 'Add New Category'}
               </h4>
-              <div className="flex gap-4 items-center">
+              <div className="flex flex-col sm:flex-row gap-2 md:gap-4 items-stretch sm:items-center">
                 <input
                   type="text"
                   placeholder="Category Name"
                   value={categoryName}
                   onChange={(e) => setCategoryName(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="flex-1 px-3 py-2 text-sm md:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 />
                 {editingCategory ? (
-                  <>
+                  <div className="flex gap-2 md:gap-3">
                     <button
                       onClick={handleUpdate}
                       disabled={submitLoading}
-                      className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-3 md:px-4 py-2 text-sm md:text-base bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {submitLoading ? 'Updating...' : 'Update'}
                     </button>
                     <button
                       onClick={handleCancel}
-                      className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
+                      className="px-3 md:px-4 py-2 text-sm md:text-base bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors"
                     >
                       Cancel
                     </button>
-                  </>
+                  </div>
                 ) : (
                   <button
                     onClick={handleAdd}
                     disabled={submitLoading}
-                    className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 md:px-4 py-2 text-sm md:text-base bg-orange-600 text-white rounded-md hover:bg-orange-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {submitLoading ? 'Adding...' : 'Add Category'}
                   </button>
@@ -185,48 +185,50 @@ const CategoriesPage = () => {
             </div>
 
             {/* Categories Table */}
-            <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
-              <table className="table-fixed w-full overflow-hidden">
-                <thead className="text-gray-900 text-sm text-left">
-                  <tr>
-                    <th className="w-2/3 md:w-2/3 px-4 py-3 font-medium truncate">Category Name</th>
-                    <th className="px-4 py-3 font-medium truncate max-sm:hidden">Products</th>
-                    <th className="px-4 py-3 font-medium truncate">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="text-sm text-gray-500">
-                  {categories.map((category) => (
-                    <tr key={category._id} className="border-t border-gray-500/20">
-                      <td className="md:px-4 pl-2 md:pl-4 py-3 truncate">
-                        <span className="text-gray-900 font-medium">{category.name}</span>
-                      </td>
-                      <td className="px-4 py-3 max-sm:hidden">{category.products} products</td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleEdit(category)}
-                            className="p-2 text-orange-600 hover:bg-orange-50 rounded-md transition-colors"
-                            title="Edit Category"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteClick(category)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
-                            title="Delete Category"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
-                        </div>
-                      </td>
+            <div className="flex flex-col items-center max-w-full w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
+              <div className="w-full overflow-x-auto">
+                <table className="table-fixed w-full min-w-[500px] overflow-hidden">
+                  <thead className="text-gray-900 text-xs md:text-sm text-left bg-gray-50">
+                    <tr>
+                      <th className="w-2/3 md:w-2/3 px-2 md:px-4 py-2 md:py-3 font-medium truncate">Category Name</th>
+                      <th className="px-2 md:px-4 py-2 md:py-3 font-medium truncate max-sm:hidden">Products</th>
+                      <th className="px-2 md:px-4 py-2 md:py-3 font-medium truncate text-center">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="text-xs md:text-sm text-gray-500">
+                    {categories.map((category) => (
+                      <tr key={category._id} className="border-t border-gray-500/20 hover:bg-gray-50">
+                        <td className="px-2 md:px-4 py-2 md:py-3 truncate">
+                          <span className="text-gray-900 font-medium text-sm md:text-base">{category.name}</span>
+                        </td>
+                        <td className="px-2 md:px-4 py-2 md:py-3 max-sm:hidden text-xs md:text-sm">{category.products} products</td>
+                        <td className="px-2 md:px-4 py-2 md:py-3">
+                          <div className="flex items-center justify-center gap-1 md:gap-2">
+                            <button
+                              onClick={() => handleEdit(category)}
+                              className="p-1.5 md:p-2 text-orange-600 hover:bg-orange-50 rounded-md transition-colors"
+                              title="Edit Category"
+                            >
+                              <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(category)}
+                              className="p-1.5 md:p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                              title="Delete Category"
+                            >
+                              <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
           )}

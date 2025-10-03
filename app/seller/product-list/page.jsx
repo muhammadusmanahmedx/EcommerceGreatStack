@@ -81,48 +81,49 @@ useEffect(() => {
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
-      {loading ? <Loading /> : <div className="w-full md:p-10 p-4">
-        <h2 className="pb-4 text-lg font-medium">All Product</h2>
-        <div className="flex flex-col items-center max-w-4xl w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
-          <table className=" table-fixed w-full overflow-hidden">
-            <thead className="text-gray-900 text-sm text-left">
-              <tr>
-                <th className="w-2/3 md:w-2/5 px-4 py-3 font-medium truncate">Product</th>
-                <th className="px-4 py-3 font-medium truncate max-sm:hidden">Category</th>
-                <th className="px-4 py-3 font-medium truncate">
+      {loading ? <Loading /> : <div className="w-full lg:p-10 md:p-6 p-3">
+        <h2 className="pb-3 md:pb-4 text-lg md:text-xl font-medium">All Products</h2>
+        <div className="flex flex-col items-center max-w-full w-full overflow-hidden rounded-md bg-white border border-gray-500/20">
+          <div className="w-full overflow-x-auto">
+            <table className="table-fixed w-full min-w-[600px] overflow-hidden">
+              <thead className="text-gray-900 text-xs md:text-sm text-left bg-gray-50">
+                <tr>
+                  <th className="w-2/3 md:w-2/5 px-2 md:px-4 py-2 md:py-3 font-medium truncate">Product</th>
+                <th className="px-2 md:px-4 py-2 md:py-3 font-medium truncate max-sm:hidden">Category</th>
+                <th className="px-2 md:px-4 py-2 md:py-3 font-medium truncate">
                   Price
                 </th>
-                <th className="px-4 py-3 font-medium truncate">Actions</th>
+                <th className="px-2 md:px-4 py-2 md:py-3 font-medium truncate text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="text-sm text-gray-500">
+            <tbody className="text-xs md:text-sm text-gray-500">
               {products.map((product, index) => (
-                <tr key={index} className="border-t border-gray-500/20">
-                  <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
-                    <div className="bg-gray-500/10 rounded p-2">
+                <tr key={index} className="border-t border-gray-500/20 hover:bg-gray-50">
+                  <td className="px-2 md:px-4 py-2 md:py-3 flex items-center space-x-2 md:space-x-3">
+                    <div className="bg-gray-500/10 rounded p-1 md:p-2 flex-shrink-0">
                       <Image
                         src={product.image[0]}
                         alt="product Image"
-                        className="w-16"
-                        width={1280}
-                        height={720}
+                        className="w-10 h-10 md:w-16 md:h-16 object-cover"
+                        width={64}
+                        height={64}
                       />
                     </div>
-                    <span className="truncate w-full">
+                    <span className="truncate text-xs md:text-sm leading-tight">
                       {product.name}
                     </span>
                   </td>
-                  <td className="px-4 py-3 max-sm:hidden">{product.category}</td>
-                  <td className="px-4 py-3">Rs{product.offerPrice}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
+                  <td className="px-2 md:px-4 py-2 md:py-3 max-sm:hidden text-xs md:text-sm">{product.category}</td>
+                  <td className="px-2 md:px-4 py-2 md:py-3 text-xs md:text-sm font-medium">Rs{product.offerPrice}</td>
+                  <td className="px-2 md:px-4 py-2 md:py-3">
+                    <div className="flex items-center justify-center gap-1 md:gap-2">
                       {/* Edit Button */}
                       <button
                         onClick={() => handleEdit(product)}
-                        className="p-2 text-orange-600 hover:bg-orange-50 rounded-md transition-colors"
+                        className="p-1.5 md:p-2 text-orange-600 hover:bg-orange-50 rounded-md transition-colors"
                         title="Edit Product"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       </button>
@@ -130,10 +131,10 @@ useEffect(() => {
                       {/* Delete Button */}
                       <button
                         onClick={() => handleDeleteClick(product)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                        className="p-1.5 md:p-2 text-red-600 hover:bg-red-50 rounded-md transition-colors"
                         title="Delete Product"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                       </button>
@@ -141,10 +142,10 @@ useEffect(() => {
                       {/* Visit Button */}
                       <button 
                         onClick={() => router.push(`/product/${product._id}`)} 
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                        className="p-1.5 md:p-2 text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
                         title="View Product"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                       </button>
@@ -154,6 +155,7 @@ useEffect(() => {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>}
       <Footer />

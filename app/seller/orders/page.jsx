@@ -45,10 +45,18 @@ const Orders = () => {
                 setLoading(false);
             } else {
                 toast.error(data.message);
+                // Use dummy data as fallback
+                console.log('API failed, using dummy data:', data.message);
+                setOrders(orderDummyData);
+                setLoading(false);
             }
         }
         catch (error) {
-          toast.error(error.message);
+            console.error('API error, using dummy data:', error);
+            toast.error('Unable to load orders - using sample data');
+            // Use dummy data as fallback and stop loading
+            setOrders(orderDummyData);
+            setLoading(false);
         }
     }
 
@@ -89,29 +97,29 @@ const Orders = () => {
 
     return (
         <div className="flex-1 h-screen overflow-scroll flex flex-col justify-between text-sm">
-            {loading ? <Loading /> : <div className="md:p-10 p-4 space-y-5">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-2xl font-semibold text-gray-800">Orders Management</h2>
-                    <div className="text-sm text-gray-500">
+            {loading ? <Loading /> : <div className="lg:p-10 md:p-6 p-3 space-y-4 md:space-y-5">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+                    <h2 className="text-xl md:text-2xl font-semibold text-gray-800">Orders Management</h2>
+                    <div className="text-xs md:text-sm text-gray-500">
                         Total: {orders.length} orders
                     </div>
                 </div>
                 
                 {/* Filter Tabs */}
                 <div className="bg-white rounded-lg p-1 shadow-sm border">
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1 md:gap-2">
                         {statusFilters.map((filter) => (
                             <button
                                 key={filter.key}
                                 onClick={() => setActiveFilter(filter.key)}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
+                                className={`px-2 md:px-4 py-1.5 md:py-2 rounded-md text-xs md:text-sm font-medium transition-all duration-200 flex items-center gap-1 md:gap-2 min-w-0 ${
                                     activeFilter === filter.key
                                         ? 'bg-orange-100 text-orange-700 shadow-sm border border-orange-200'
                                         : 'text-gray-600 hover:bg-gray-100'
                                 }`}
                             >
-                                <span>{filter.label}</span>
-                                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                                <span className="truncate">{filter.label}</span>
+                                <span className={`px-1.5 md:px-2 py-0.5 md:py-1 rounded-full text-xs font-bold ${
                                     activeFilter === filter.key
                                         ? 'bg-orange-200 text-orange-800'
                                         : 'bg-gray-200 text-gray-600'
@@ -124,17 +132,17 @@ const Orders = () => {
                 </div>
 
                 {/* Orders Display */}
-                <div className="max-w-6xl">
+                <div className="w-full max-w-none">
                     {filteredOrders.length === 0 ? (
-                        <div className="text-center py-12 bg-white rounded-lg border">
+                        <div className="text-center py-8 md:py-12 bg-white rounded-lg border">
                             <div className="text-gray-400 text-lg mb-2">📦</div>
-                            <p className="text-gray-500 font-medium">
+                            <p className="text-gray-500 font-medium text-sm md:text-base">
                                 {activeFilter === 'all' ? 'No orders found' : `No ${activeFilter} orders`}
                             </p>
                         </div>
                     ) : (
                         filteredOrders.map((order, index) => (
-                            <div key={index} className={`flex flex-col gap-5 p-6 mb-6 rounded-xl shadow-sm border-l-4 transition-all duration-200 hover:shadow-md ${
+                            <div key={index} className={`flex flex-col gap-3 md:gap-5 p-3 md:p-6 mb-4 md:mb-6 rounded-xl shadow-sm border-l-4 transition-all duration-200 hover:shadow-md ${
                                 order.status === 'pending' ? 'bg-yellow-50 border-yellow-400' :
                                 order.status === 'accepted' ? 'bg-blue-50 border-blue-400' :
                                 order.status === 'out-for-delivery' ? 'bg-orange-50 border-orange-400' :
@@ -142,10 +150,10 @@ const Orders = () => {
                                 'bg-white border-gray-300'
                             }`}>
                                 {/* Order Header */}
-                                <div className="flex justify-between items-center border-b pb-4">
-                                    <div className="flex items-center gap-4">
-                                        <h3 className="text-xl font-bold text-gray-800">Order #{order._id.slice(-6)}</h3>
-                                        <span className={`px-3 py-1 rounded-full text-sm font-semibold uppercase tracking-wide ${
+                                <div className="flex flex-col md:flex-row md:justify-between md:items-center border-b pb-3 md:pb-4 gap-3">
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 md:gap-4">
+                                        <h3 className="text-lg md:text-xl font-bold text-gray-800">Order #{order._id.slice(-6)}</h3>
+                                        <span className={`px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold uppercase tracking-wide self-start ${
                                             order.status === 'pending' ? 'bg-yellow-200 text-yellow-800' :
                                             order.status === 'accepted' ? 'bg-blue-200 text-blue-800' :
                                             order.status === 'out-for-delivery' ? 'bg-orange-200 text-orange-800' :
@@ -155,14 +163,14 @@ const Orders = () => {
                                             {order.status === 'out-for-delivery' ? 'Out for Delivery' : order.status}
                                         </span>
                                     </div>
-                                    <div className="flex items-center gap-4 text-right">
-                                        <div>
-                                            <p className="text-sm text-gray-500">Order Date</p>
-                                            <p className="font-medium">{new Date(order.date).toLocaleDateString()}</p>
+                                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 md:gap-4">
+                                        <div className="text-left md:text-right">
+                                            <p className="text-xs md:text-sm text-gray-500">Order Date</p>
+                                            <p className="font-medium text-sm md:text-base">{new Date(order.date).toLocaleDateString()}</p>
                                         </div>
-                                        <div>
-                                            <p className="text-sm text-gray-500">Total Amount</p>
-                                            <p className="text-2xl font-bold text-gray-800">{currency}{order.amount}</p>
+                                        <div className="text-left md:text-right">
+                                            <p className="text-xs md:text-sm text-gray-500">Total Amount</p>
+                                            <p className="text-lg md:text-2xl font-bold text-gray-800">{currency}{order.amount}</p>
                                         </div>
                                     </div>
                                 </div>                            {/* Order Items */}
@@ -214,25 +222,29 @@ const Orders = () => {
                             </div>
                             
                             {/* Customer Details and Status */}
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 md:gap-5">
                                 {/* Customer Address */}
-                                <div className="bg-gray-50 p-4 rounded">
-                                    <h4 className="font-medium text-gray-800 mb-2">Delivery Address:</h4>
-                                    <p>
-                                        <span className="font-medium">{order.address.fullName}</span>
-                                        <br />
-                                        <span>{order.address.area}</span>
-                                        <br />
-                                        <span>{order.address.city}</span>
-                                        <br />
-                                        <span className="text-sm text-gray-600">Phone: {order.address.phoneNumber}</span>
-                                    </p>
+                                <div className="bg-gray-50 p-3 md:p-4 rounded">
+                                    <h4 className="font-medium text-gray-800 mb-2 text-sm md:text-base">Delivery Address:</h4>
+                                    {order.address ? (
+                                        <p className="text-sm md:text-base">
+                                            <span className="font-medium">{order.address.fullName || 'N/A'}</span>
+                                            <br />
+                                            <span>{order.address.area || 'N/A'}</span>
+                                            <br />
+                                            <span>{order.address.city || 'N/A'}</span>
+                                            <br />
+                                            <span className="text-xs md:text-sm text-gray-600">Phone: {order.address.phoneNumber || 'N/A'}</span>
+                                        </p>
+                                    ) : (
+                                        <p className="text-gray-500 italic text-sm">Address information not available</p>
+                                    )}
                                 </div>
                                 
                                 {/* Order Info */}
-                                <div className="bg-gray-50 p-4 rounded">
-                                    <h4 className="font-medium text-gray-800 mb-2">Order Info:</h4>
-                                    <p className="space-y-1">
+                                <div className="bg-gray-50 p-3 md:p-4 rounded">
+                                    <h4 className="font-medium text-gray-800 mb-2 text-sm md:text-base">Order Info:</h4>
+                                    <p className="space-y-1 text-sm md:text-base">
                                         <span className="block">Items: {order.items.length}</span>
                                         <span className="block">Method: COD</span>
                                         <span className="block">Payment: {order.status === 'pending' ? 'Pending' : 'Confirmed'}</span>
@@ -240,13 +252,13 @@ const Orders = () => {
                                 </div>
                                 
                                 {/* Status Management */}
-                                <div className="bg-gray-50 p-4 rounded">
-                                    <h4 className="font-medium text-gray-800 mb-2">Order Status:</h4>
+                                <div className="bg-gray-50 p-3 md:p-4 rounded">
+                                    <h4 className="font-medium text-gray-800 mb-2 text-sm md:text-base">Order Status:</h4>
                                     <select
                                         value={order.status}
                                         onChange={(e) => updateOrderStatus(order._id, e.target.value)}
                                         disabled={updatingStatus[order._id]}
-                                        className={`w-full p-2 border rounded text-sm font-medium ${
+                                        className={`w-full p-2 border rounded text-xs md:text-sm font-medium ${
                                             order.status === 'pending' ? 'text-yellow-600 bg-yellow-50 border-yellow-200' :
                                             order.status === 'accepted' ? 'text-blue-600 bg-blue-50 border-blue-200' :
                                             order.status === 'out-for-delivery' ? 'text-orange-600 bg-orange-50 border-orange-200' :

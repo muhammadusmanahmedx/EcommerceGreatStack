@@ -30,8 +30,4 @@ try {
      return NextResponse.json({ success: false, message: error.message })
 
 }
-
-
-
-    return NextResponse.json({ success: true, message: "Seller order route" })
 }
