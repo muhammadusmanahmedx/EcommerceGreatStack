@@ -12,7 +12,7 @@ const ImagesTextSection = () => {
         {/* ---------- Row 1: Product Images + Brand Title ---------- */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 items-center">
           {/* Left Product - Always visible */}
-          <div className="relative overflow-hidden rounded-2xl h-64 md:h-72 lg:h-80 shadow-xl">
+          <div className="relative overflow-hidden rounded-2xl h-64 md:h-72 lg:h-80 border-2 border-gray-200">
             <img
               src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759065700/WhatsApp_Image_2025-09-28_at_6.19.46_PM_1_dysvuk.png"
               alt="Premium Perfume Collection"
@@ -21,28 +21,30 @@ const ImagesTextSection = () => {
           </div>
 
           {/* Center Brand Title - Always visible */}
-          <div className="relative flex items-center justify-center h-64 md:h-72 lg:h-80 rounded-2xl bg-gradient-to-br from-white via-amber-50/50 to-orange-50/30 shadow-lg">
-            <div className="text-center space-y-2">
-              <div className="mb-3 md:mb-4">
-                <div className="w-12 md:w-16 h-0.5 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mx-auto mb-2"></div>
+         <div className="relative flex items-center justify-center h-64 md:h-72 lg:h-80 rounded-2xl border-2 border-transparent bg-gradient-to-r from-yellow-300/40 via-amber-300/60 to-yellow-300/40 p-0.5">
+            <div className="relative w-full h-full rounded-2xl bg-gradient-to-br from-white via-amber-50/50 to-orange-50/30 flex items-center justify-center">
+              <div className="text-center space-y-2">
+                <div className="mb-3 md:mb-4">
+                  <div className="w-12 md:w-16 h-0.5 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mx-auto mb-2"></div>
+                </div>
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold leading-tight">
+                  <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">
+                    Salsabeel
+                  </span>
+                </h2>
+                <h3 className="text-lg md:text-xl lg:text-2xl font-light text-gray-700 tracking-widest">
+                  SCENTS
+                </h3>
+                <div className="pt-3 md:pt-4">
+                  <div className="w-12 md:w-16 h-0.5 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mx-auto"></div>
+                </div>
+                <p className="text-xs text-gray-500 tracking-wider pt-2">LUXURY FRAGRANCES</p>
               </div>
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold leading-tight">
-                <span className="bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 bg-clip-text text-transparent">
-                  Salsabeel
-                </span>
-              </h2>
-              <h3 className="text-lg md:text-xl lg:text-2xl font-light text-gray-700 tracking-widest">
-                SCENTS
-              </h3>
-              <div className="pt-3 md:pt-4">
-                <div className="w-12 md:w-16 h-0.5 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mx-auto"></div>
-              </div>
-              <p className="text-xs text-gray-500 tracking-wider pt-2">LUXURY FRAGRANCES</p>
             </div>
           </div>
 
           {/* Right Product - Hidden on mobile and md, visible on lg and up */}
-          <div className="hidden lg:block relative overflow-hidden rounded-2xl h-72 lg:h-80 shadow-xl">
+          <div className="hidden lg:block relative overflow-hidden rounded-2xl h-72 lg:h-80 border-2 border-gray-200">
             <img
               src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759066061/WhatsApp_Image_2025-09-28_at_6.19.47_PM_1_mjnuqc.png"
               alt="Exclusive Perfume Edition"
@@ -54,7 +56,7 @@ const ImagesTextSection = () => {
         {/* ---------- Row 2: Product Feature Section ---------- */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
           {/* Left - Large Product Image - Always visible */}
-          <div className="relative overflow-hidden rounded-2xl h-64 md:h-80 lg:h-auto shadow-2xl">
+          <div className="relative overflow-hidden rounded-2xl h-64 md:h-80 lg:h-auto border-2 border-gray-200">
             <div className="absolute inset-0"></div>
             <img
               src="https://res.cloudinary.com/dshjm6hcx/image/upload/v1759255867/Gemini_Generated_Image_5f5cgw5f5cgw5f5c_fjtwkv.png"
@@ -66,10 +68,10 @@ const ImagesTextSection = () => {
           {/* Right - Information Cards */}
           <div className="flex flex-col gap-6 md:gap-8">
             {/* Top Card - Best Selling - Always visible */}
-            <div className="p-6 md:p-8 lg:p-10 rounded-2xl shadow-lg">
+            <div className="p-6 md:p-8 lg:p-10 rounded-2xl border-2 border-gray-200">
               <div className="space-y-3 md:space-y-4">
                 <div className="inline-block">
-                  <span className="inline-block bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-black text-xs font-semibold tracking-widest px-3 md:px-4 py-1.5 md:py-2 rounded-full shadow-lg border border-yellow-300/30 backdrop-blur-sm">
+                  <span className="inline-block bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-600 text-black text-xs font-semibold tracking-widest px-3 md:px-4 py-1.5 md:py-2 rounded-full border border-yellow-300/30 backdrop-blur-sm">
                     FEATURED COLLECTION
                   </span>
                 </div>
@@ -86,10 +88,10 @@ const ImagesTextSection = () => {
             </div>
 
             {/* Bottom Card - Nature's Essence - Hidden on mobile, visible on lg and up */}
-            <div className="hidden lg:block p-6 md:p-8 lg:p-10 bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 rounded-2xl shadow-lg">
+            <div className="hidden lg:block p-6 md:p-8 lg:p-10 bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 rounded-2xl border-2 border-gray-200">
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center shadow-lg flex-shrink-0">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center border border-gray-300 flex-shrink-0">
                     <svg className="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
                     </svg>
